@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maritê | Cama, Mesa e Banho</title>
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Montserrat (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração do Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        marite: {
+                            primary: '#843f64', // Roxo/Ameixa Vibrante
+                            dark: '#3f102f',    // Roxo Profundo/Escuro
+                            bg: '#efebeb',      // Off-White/Cinza Claríssimo
+                            accent1: '#d1959e', // Rosa Velho/Rose
+                            accent2: '#da9cc3', // Magenta Claro
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos adicionais para scrollbar e animações finas */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #efebeb; }
+        ::-webkit-scrollbar-thumb { background: #d1959e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #843f64; }
+
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animação do Modal */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-marite-bg text-gray-800 font-sans antialiased overflow-x-hidden relative">
+
+    <!-- HEADER -->
+    <header class="fixed w-full top-0 left-0 z-40 bg-white border-b border-marite-accent1 shadow-sm transition-all duration-300">
+        <!-- Alterado para w-full e px-4 md:px-8 para forçar o logo no canto esquerdo -->
+        <div class="w-full px-4 md:px-8 py-3 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="h-12 w-12 rounded-full overflow-hidden border-2 border-marite-accent1 group-hover:border-marite-primary transition-colors flex-shrink-0 bg-marite-dark flex items-center justify-center">
+                    <!-- Usando evento onerror para exibir as iniciais caso o arquivo logo.png não seja encontrado -->
+                    <img src="logo.png" alt="Maritê Logo" class="h-full w-full object-cover" 
+                         onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                    <span class="hidden text-white font-serif font-bold text-xl">M</span>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="font-serif text-2xl font-bold text-marite-dark tracking-widest uppercase">Maritê</h1>
+                    <p class="text-[0.6rem] text-marite-primary tracking-widest uppercase mt-[-4px]">Cama, Mesa e Banho</p>
+                </div>
+            </a>
+
+            <!-- Navegação Desktop -->
+            <nav class="hidden md:flex gap-6 font-medium text-sm text-marite-dark">
+                <a href="#cama" class="hover:text-marite-primary transition-colors hover:underline decoration-marite-accent2 underline-offset-4">Cama</a>
+                <a href="#mesa" class="hover:text-marite-primary transition-colors hover:underline decoration-marite-accent2 underline-offset-4">Mesa</a>
+                <a href="#banho" class="hover:text-marite-primary transition-colors hover:underline decoration-marite-accent2 underline-offset-4">Banho</a>
+                <a href="#vestuario" class="hover:text-marite-primary transition-colors hover:underline decoration-marite-accent2 underline-offset-4">Vestuário</a>
+                <a href="#decoracao" class="hover:text-marite-primary transition-colors hover:underline decoration-marite-accent2 underline-offset-4">Decoração</a>
+            </nav>
+
+            <!-- Ícone Carrinho -->
+            <button onclick="toggleCart()" class="relative text-marite-dark hover:text-marite-primary transition-colors p-2">
+                <i class="fas fa-shopping-bag text-2xl"></i>
+                <span id="cart-badge" class="absolute top-0 right-0 bg-marite-primary text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center transform scale-0 transition-transform duration-300">0</span>
+            </button>
+        </div>
+        
+        <!-- Navegação Mobile (Scroll horizontal) -->
+        <div class="md:hidden bg-marite-dark text-marite-bg text-xs font-medium overflow-x-auto hide-scroll py-2 px-4 whitespace-nowrap space-x-4 border-t border-marite-primary">
+            <a href="#cama" class="inline-block uppercase tracking-wider">Cama</a>
+            <a href="#mesa" class="inline-block uppercase tracking-wider">Mesa</a>
+            <a href="#banho" class="inline-block uppercase tracking-wider">Banho</a>
+            <a href="#vestuario" class="inline-block uppercase tracking-wider">Vestuário</a>
+            <a href="#decoracao" class="inline-block uppercase tracking-wider">Decoração</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION (ATUALIZADA COM A IMAGEM FORNECIDA) -->
+    <section class="mt-[100px] md:mt-[76px] relative bg-white overflow-hidden">
+        <div class="container mx-auto px-4 py-12 md:py-24 flex flex-col md:flex-row items-center gap-12">
+            
+            <!-- Text Content -->
+            <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left z-10">
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-marite-dark leading-tight">Leve o conforto e a elegância para o seu lar.</h2>
+                <p class="text-gray-600 mb-10 text-lg md:text-xl font-light max-w-lg">Descubra a nossa coleção exclusiva de peças selecionadas para transformar os seus ambientes em verdadeiros refúgios de bem-estar.</p>
+                <a href="#catalogo" class="bg-marite-primary hover:bg-marite-dark text-white font-medium py-4 px-10 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    Ver Catálogo
+                </a>
+            </div>
+            
+            <!-- Image Promo -->
+            <div class="w-full md:w-1/2 relative">
+                <!-- Efeito visual de fundo suave atrás da imagem -->
+                <div class="absolute inset-0 bg-marite-accent2 rounded-full blur-3xl opacity-20 transform translate-x-10 translate-y-10"></div>
+                
+                <!-- Imagem Promocional do Cliente -->
+                <img src="cca88ca0-690b-4292-a943-ac416ecd9bd3.jpg" alt="Maritê - Para quem tem estilo e bom gosto" class="relative z-10 w-full max-w-md mx-auto rounded-2xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 border-4 border-marite-bg">
+            </div>
+
+        </div>
+    </section>
+
+    <!-- MAIN CATALOG -->
+    <main id="catalogo" class="container mx-auto px-4 py-16 space-y-20">
+        
+        <!-- Dinamicamente preenchido pelo JS -->
+        <div id="catalog-container" class="space-y-20"></div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-marite-dark text-marite-bg pt-16 pb-8 border-t-4 border-marite-primary">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 mb-10 text-center md:text-left">
+            <div>
+                <h3 class="font-serif text-2xl font-bold mb-4 text-white tracking-widest">MARITÊ</h3>
+                <p class="text-sm font-light text-marite-accent1 max-w-xs mx-auto md:mx-0">Especialistas em Cama, Mesa e Banho. Peças de alto padrão para quem valoriza os detalhes e o bem-estar da família.</p>
+            </div>
+            <div>
+                <h4 class="font-serif text-lg text-white mb-4">Contato</h4>
+                <ul class="space-y-3 text-sm font-light text-marite-accent1">
+                    <li><i class="fab fa-whatsapp mr-2 text-marite-accent2"></i> (62) 99639-2199</li>
+                    <li><i class="far fa-envelope mr-2 text-marite-accent2"></i> marcia.regis190@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-lg text-white mb-4">Redes Sociais</h4>
+                <a href="https://instagram.com/maritecamamesaebanho" target="_blank" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-marite-primary text-white hover:bg-marite-accent2 transition-colors">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <p class="text-sm mt-3 text-marite-accent1">@maritecamamesaebanho</p>
+            </div>
+        </div>
+        <div class="text-center text-xs text-marite-accent1 border-t border-gray-700 pt-8">
+            <p>&copy; <span id="current-year"></span> Maritê Cama, Mesa e Banho. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL DE PRODUTO (Escolha de Cor e Quantidade) -->
+    <div id="product-modal-backdrop" class="fixed inset-0 bg-marite-dark bg-opacity-70 z-50 hidden flex items-center justify-center transition-opacity duration-300 opacity-0" onclick="closeModal(event)">
+        <div id="product-modal-content" class="bg-white rounded-2xl w-11/12 max-w-md overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+            <!-- Imagem e Fechar -->
+            <div class="relative h-48 bg-gray-100">
+                <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
+                <button onclick="closeModal()" class="absolute top-3 right-3 bg-white text-marite-dark hover:text-marite-primary w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <h3 id="modal-title" class="font-serif text-2xl font-bold text-marite-dark mb-1">Nome do Produto</h3>
+                <p id="modal-price" class="text-marite-primary font-bold text-lg mb-6">R$ 0,00</p>
+                
+                <!-- Escolha de Cor -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Selecione a Cor:</label>
+                    <div id="modal-colors" class="flex flex-wrap gap-3">
+                        <!-- Botões de cor gerados via JS -->
+                    </div>
+                    <p id="modal-color-error" class="text-red-500 text-xs mt-1 hidden">Por favor, selecione uma cor.</p>
+                </div>
+
+                <!-- Quantidade -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Quantidade:</label>
+                    <div class="flex items-center bg-gray-50 border border-gray-200 rounded-lg w-32">
+                        <button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-marite-primary">-</button>
+                        <input type="number" id="modal-qty" value="1" min="1" class="w-12 h-10 text-center bg-transparent font-medium focus:outline-none" readonly>
+                        <button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-marite-primary">+</button>
+                    </div>
+                </div>
+
+                <!-- Botão Adicionar -->
+                <button onclick="confirmAddToCart()" class="w-full bg-marite-primary hover:bg-marite-dark text-white font-semibold py-3 px-4 rounded-xl transition-colors shadow-md flex items-center justify-center gap-2">
+                    <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDE DRAWER DO CARRINHO -->
+    <div id="cart-backdrop" class="fixed inset-0 bg-marite-dark bg-opacity-70 z-50 hidden transition-opacity duration-300 opacity-0" onclick="toggleCart(event)"></div>
+    
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-marite-bg z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <!-- Drawer Header -->
+        <div class="bg-white px-6 py-4 border-b border-marite-accent1 flex items-center justify-between shadow-sm shrink-0">
+            <h2 class="font-serif text-xl font-bold text-marite-dark"><i class="fas fa-shopping-bag mr-2 text-marite-primary"></i> Seu Carrinho</h2>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-marite-primary transition-colors text-xl">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Content (Scrollable) -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            
+            <!-- Itens do Carrinho -->
+            <div id="cart-items" class="space-y-4">
+                <!-- Itens injetados via JS -->
+            </div>
+
+            <!-- Total -->
+            <div id="cart-total-container" class="hidden bg-white p-4 rounded-xl shadow-sm border border-marite-accent1/30">
+                <div class="flex justify-between items-center text-lg font-bold text-marite-dark">
+                    <span>Total:</span>
+                    <span id="cart-total-value">R$ 0,00</span>
+                </div>
+            </div>
+
+            <!-- Formulário de Checkout -->
+            <div id="checkout-form-container" class="hidden bg-white p-5 rounded-xl shadow-sm border border-marite-accent1/30 mt-6">
+                <h3 class="font-serif font-bold text-marite-dark mb-4 border-b pb-2">Finalizar Pedido</h3>
+                <form id="checkout-form" class="space-y-4" onsubmit="event.preventDefault(); submitOrder();">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Nome Completo *</label>
+                        <input type="text" id="cust-name" required class="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-marite-primary focus:border-marite-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Endereço de Entrega *</label>
+                        <textarea id="cust-address" required rows="3" placeholder="Rua, Número, Bairro, Cidade..." class="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-marite-primary focus:border-marite-primary outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Forma de Pagamento *</label>
+                        <select id="cust-payment" required class="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-marite-primary focus:border-marite-primary outline-none bg-white">
+                            <option value="">Selecione...</option>
+                            <option value="PIX">PIX (Chave enviada no WhatsApp)</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito (Na entrega)</option>
+                            <option value="Cartão de Débito">Cartão de Débito (Na entrega)</option>
+                            <option value="Dinheiro">Dinheiro (Na entrega)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md flex items-center justify-center gap-2 mt-2">
+                        <i class="fab fa-whatsapp text-xl"></i> Enviar Pedido via WhatsApp
+                    </button>
+                </form>
+            </div>
+
+            <!-- Carrinho Vazio -->
+            <div id="empty-cart-msg" class="text-center text-gray-500 py-10">
+                <i class="fas fa-box-open text-4xl mb-3 text-marite-accent1"></i>
+                <p>Seu carrinho está vazio.</p>
+                <button onclick="toggleCart()" class="mt-4 text-marite-primary font-medium hover:underline">Continuar comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT: Dados e Lógica -->
+    <script>
+        // Set ano atual no footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // 1. DADOS DOS PRODUTOS (Catálogo Fictício)
+        const productsDB = [
+            // CAMA
+            {
+                id: 1, category: "Cama", name: "Lençol Premium 400 Fios Algodão", price: 189.90,
+                img: "https://images.unsplash.com/photo-1522771731478-44eb10e5c80e?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Branco", hex: "#ffffff" },
+                    { name: "Pérola", hex: "#f3e5ab" },
+                    { name: "Cinza Claro", hex: "#d3d3d3" }
+                ]
+            },
+            {
+                id: 2, category: "Cama", name: "Cobre Leito Matelassê Dupla Face", price: 249.90,
+                img: "https://images.unsplash.com/photo-1615876234886-fd1a88df4bf6?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Roxo Maritê", hex: "#843f64" },
+                    { name: "Rose Gold", hex: "#d1959e" }
+                ]
+            },
+            // MESA
+            {
+                id: 3, category: "Mesa", name: "Kit Panos de Prato Bordados (3 peças)", price: 45.00,
+                img: "https://images.unsplash.com/photo-1584346804595-cb0050808c10?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Sortido Clássico", hex: "#eeeeee" }
+                ]
+            },
+            {
+                id: 4, category: "Mesa", name: "Forro de Mesa Linho Elegance", price: 120.00,
+                img: "https://images.unsplash.com/photo-1576020584443-41c4f52f36db?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Cru/Natural", hex: "#d4c4b7" },
+                    { name: "Branco", hex: "#ffffff" }
+                ]
+            },
+            {
+                id: 5, category: "Mesa", name: "Cobre Lanche Renda Francesa", price: 65.50,
+                img: "https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Branco", hex: "#ffffff" }
+                ]
+            },
+            // BANHO
+            {
+                id: 6, category: "Banho", name: "Jogo de Toalhas Bordadas (5 peças)", price: 199.90,
+                img: "https://images.unsplash.com/photo-1616627561839-074385245ff6?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Branco c/ Dourado", hex: "#fffdf0" },
+                    { name: "Ameixa", hex: "#3f102f" }
+                ]
+            },
+            {
+                id: 7, category: "Banho", name: "Toalha de Banho Gigante Algodão", price: 79.90,
+                img: "https://images.unsplash.com/photo-1583900628282-e87f610335e3?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Rosa Chá", hex: "#da9cc3" },
+                    { name: "Azul Bebê", hex: "#b2d8d8" },
+                    { name: "Branco", hex: "#ffffff" }
+                ]
+            },
+            // VESTUÁRIO
+            {
+                id: 8, category: "Vestuário", name: "Camisola Seda com Renda", price: 159.00,
+                img: "https://images.unsplash.com/photo-1610427329528-98e9162e2195?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Preto", hex: "#111111" },
+                    { name: "Vinho Escuro", hex: "#3f102f" }
+                ]
+            },
+            {
+                id: 9, category: "Vestuário", name: "Roupão Aveludado Premium", price: 189.90,
+                img: "https://images.unsplash.com/photo-1631522858712-42171c7b8c2e?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Branco", hex: "#ffffff" },
+                    { name: "Rosa Seco", hex: "#d1959e" }
+                ]
+            },
+            // DECORAÇÃO
+            {
+                id: 10, category: "Decoração", name: "Tapete Felpudo Sala/Quarto", price: 299.00,
+                img: "https://images.unsplash.com/photo-1595521634839-813c9fb6097c?auto=format&fit=crop&w=600&q=80",
+                colors: [
+                    { name: "Areia", hex: "#eaddd5" },
+                    { name: "Cinza Chumbo", hex: "#4a4a4a" }
+                ]
+            }
+        ];
+
+        // 2. ESTADOS DA APLICAÇÃO
+        let cart = [];
+        let currentSelectedProduct = null;
+        let selectedColor = null;
+
+        // Utilitário de moeda
+        const formatBRL = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        // 3. RENDERIZAR CATÁLOGO
+        function renderCatalog() {
+            const container = document.getElementById('catalog-container');
+            const categories = ["Cama", "Mesa", "Banho", "Vestuário", "Decoração"];
+            
+            categories.forEach(category => {
+                const catProducts = productsDB.filter(p => p.category === category);
+                if (catProducts.length === 0) return;
+
+                // Section wrapper
+                const section = document.createElement('section');
+                section.id = category.toLowerCase();
+                section.className = "pt-6"; // offset for fixed header
+                
+                // Title
+                section.innerHTML = `
+                    <div class="flex items-center gap-4 mb-8">
+                        <h2 class="font-serif text-3xl font-bold text-marite-dark">${category}</h2>
+                        <div class="h-px bg-marite-accent1 flex-1"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="grid-${category}"></div>
+                `;
+                
+                container.appendChild(section);
+                
+                const grid = section.querySelector(`#grid-${category}`);
+                
+                // Cards
+                catProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col";
+                    
+                    card.innerHTML = `
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <span class="text-[0.65rem] uppercase tracking-widest text-marite-accent2 font-bold mb-1">${product.category}</span>
+                            <h3 class="font-serif font-bold text-marite-dark text-lg leading-tight mb-2">${product.name}</h3>
+                            <div class="mt-auto">
+                                <p class="text-marite-primary font-bold text-xl mb-4">${formatBRL(product.price)}</p>
+                                <button onclick="openModal(${product.id})" class="w-full bg-marite-bg text-marite-primary font-semibold py-2.5 rounded-xl border border-marite-primary hover:bg-marite-primary hover:text-white transition-colors">
+                                    Escolher Opções
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            });
+        }
+
+        // 4. LÓGICA DO MODAL (ESCOLHA DE COR E QTD)
+        function openModal(productId) {
+            currentSelectedProduct = productsDB.find(p => p.id === productId);
+            selectedColor = null; // Reset
+            
+            // Popula dados
+            document.getElementById('modal-img').src = currentSelectedProduct.img;
+            document.getElementById('modal-title').textContent = currentSelectedProduct.name;
+            document.getElementById('modal-price').textContent = formatBRL(currentSelectedProduct.price);
+            document.getElementById('modal-qty').value = 1;
+            document.getElementById('modal-color-error').classList.add('hidden');
+
+            // Gera botões de cor
+            const colorsContainer = document.getElementById('modal-colors');
+            colorsContainer.innerHTML = '';
+            
+            currentSelectedProduct.colors.forEach((color, index) => {
+                const btn = document.createElement('button');
+                // Estilo para o círculo de cor
+                const isWhite = color.hex.toLowerCase() === '#ffffff';
+                const borderClass = isWhite ? 'border-gray-300' : 'border-transparent';
+                
+                btn.className = `group flex flex-col items-center gap-1 focus:outline-none color-option-btn`;
+                btn.dataset.colorName = color.name;
+                
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-full border-2 ${borderClass} shadow-sm transition-transform group-hover:scale-110 flex items-center justify-center" style="background-color: ${color.hex}">
+                        <i class="fas fa-check text-white text-xs opacity-0"></i>
+                    </span>
+                    <span class="text-[0.65rem] text-gray-500 font-medium">${color.name}</span>
+                `;
+                
+                // Ajustar ícone check se a cor for muito clara
+                if(isWhite || color.hex.toLowerCase() === '#f3e5ab' || color.hex.toLowerCase() === '#eeeeee'){
+                    btn.querySelector('i').classList.replace('text-white', 'text-gray-800');
+                }
+
+                btn.onclick = () => selectColor(btn, color.name);
+                colorsContainer.appendChild(btn);
+            });
+
+            // Mostra Modal com animação
+            const backdrop = document.getElementById('product-modal-backdrop');
+            const content = document.getElementById('product-modal-content');
+            backdrop.classList.remove('hidden');
+            
+            // Allow display block to render before animating opacity
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function selectColor(btnElement, colorName) {
+            selectedColor = colorName;
+            document.getElementById('modal-color-error').classList.add('hidden');
+            
+            // Reset styles
+            document.querySelectorAll('.color-option-btn span.w-8').forEach(el => {
+                el.classList.remove('ring-2', 'ring-marite-primary', 'ring-offset-2');
+                el.querySelector('i').classList.add('opacity-0');
+            });
+            
+            // Set active style
+            const circle = btnElement.querySelector('span.w-8');
+            circle.classList.add('ring-2', 'ring-marite-primary', 'ring-offset-2');
+            circle.querySelector('i').classList.remove('opacity-0');
+        }
+
+        function changeQty(delta) {
+            const input = document.getElementById('modal-qty');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+
+        function closeModal(event) {
+            if(event && event.target.id !== 'product-modal-backdrop' && event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') return;
+            
+            const backdrop = document.getElementById('product-modal-backdrop');
+            const content = document.getElementById('product-modal-content');
+            
+            backdrop.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                currentSelectedProduct = null;
+            }, 300); // match transition duration
+        }
+
+        function confirmAddToCart() {
+            if (!selectedColor) {
+                document.getElementById('modal-color-error').classList.remove('hidden');
+                return;
+            }
+
+            const qty = parseInt(document.getElementById('modal-qty').value);
+            
+            // Verifica se já existe o mesmo produto com a mesma cor no carrinho
+            const existingItemIndex = cart.findIndex(item => item.id === currentSelectedProduct.id && item.color === selectedColor);
+            
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].qty += qty;
+            } else {
+                cart.push({
+                    id: currentSelectedProduct.id,
+                    name: currentSelectedProduct.name,
+                    price: currentSelectedProduct.price,
+                    img: currentSelectedProduct.img,
+                    color: selectedColor,
+                    qty: qty
+                });
+            }
+
+            updateCartUI();
+            closeModal();
+            
+            // Feedback visual no botão do carrinho
+            const badge = document.getElementById('cart-badge');
+            badge.classList.add('animate-bounce');
+            setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
+            
+            // Opcional: Abrir o carrinho automaticamente
+            // toggleCart();
+        }
+
+        // 5. LÓGICA DO CARRINHO E SIDE DRAWER
+        function toggleCart(event) {
+            if(event && event.target.id !== 'cart-backdrop' && !event.currentTarget.classList.contains('fa-times') && !event.currentTarget.classList.contains('relative')) return;
+
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-backdrop');
+            
+            const isClosed = drawer.classList.contains('translate-x-full');
+
+            if (isClosed) {
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                backdrop.classList.add('opacity-0');
+                drawer.classList.add('translate-x-full');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items');
+            const totalContainer = document.getElementById('cart-total-container');
+            const formContainer = document.getElementById('checkout-form-container');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const badge = document.getElementById('cart-badge');
+
+            // Atualiza Badge do Menu
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            badge.textContent = totalItems;
+            if(totalItems > 0) badge.classList.remove('scale-0');
+            else badge.classList.add('scale-0');
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = '';
+                totalContainer.classList.add('hidden');
+                formContainer.classList.add('hidden');
+                emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            totalContainer.classList.remove('hidden');
+            formContainer.classList.remove('hidden');
+
+            // Lista Itens
+            itemsContainer.innerHTML = '';
+            let totalValue = 0;
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.qty;
+                totalValue += subtotal;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = "flex gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm";
+                itemEl.innerHTML = `
+                    <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-sm text-marite-dark leading-tight line-clamp-2">${item.name}</h4>
+                                <p class="text-[0.65rem] text-gray-500 mt-0.5">Cor: <strong class="text-marite-primary">${item.color}</strong></p>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500 transition-colors px-1">
+                                <i class="fas fa-trash-alt text-sm"></i>
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-end mt-2">
+                            <span class="text-xs font-semibold bg-marite-bg px-2 py-1 rounded text-gray-600">Qtd: ${item.qty}</span>
+                            <span class="font-bold text-marite-primary text-sm">${formatBRL(subtotal)}</span>
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemEl);
+            });
+
+            // Atualiza Total
+            document.getElementById('cart-total-value').textContent = formatBRL(totalValue);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // 6. CHECKOUT VIA WHATSAPP
+        function submitOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const payment = document.getElementById('cust-payment').value;
+
+            if (!name || !address || !payment) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return;
+            }
+
+            if (cart.length === 0) return;
+
+            let totalValue = 0;
+            
+            // Montagem do Texto
+            let text = `Olá Márcia! Gostaria de fazer o seguinte pedido na *Maritê*:\n\n`;
+            text += `👤 *Nome:* ${name}\n`;
+            text += `📍 *Endereço:* ${address}\n`;
+            text += `💳 *Pagamento:* ${payment}\n\n`;
+            text += `🛍️ *MEU PEDIDO:*\n`;
+            text += `---------------------------\n`;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                totalValue += subtotal;
+                text += `*${item.qty}x* ${item.name}\n`;
+                text += `👉 Cor: ${item.color}\n`;
+                text += `💸 Valor: ${formatBRL(subtotal)}\n\n`;
+            });
+
+            text += `---------------------------\n`;
+            text += `💰 *TOTAL DO PEDIDO:* ${formatBRL(totalValue)}\n`;
+            
+            // Envia para o WhatsApp
+            const phone = "5562996392199";
+            const encodedText = encodeURIComponent(text);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedText}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Inicializar
+        window.onload = () => {
+            renderCatalog();
+        };
+
+    </script>
+</body>
+</html>
