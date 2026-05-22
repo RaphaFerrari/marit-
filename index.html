@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maritê | Cama, Mesa e Banho</title>
     
-    <!-- Google Fonts: Playfair Display (Serif) & Montserrat (Sans-serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/imask"></script>
     
     <script>
         tailwind.config = {
@@ -48,6 +45,14 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Animação Flutuante para o Banner */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
         /* Utilitários visuais refinados */
         .glass-effect {
             background: rgba(255, 255, 255, 0.95);
@@ -56,7 +61,7 @@
         }
         
         .input-premium {
-            @apply w-full text-sm border-b-2 border-gray-200 bg-transparent px-2 py-2 focus:border-marite-primary outline-none transition-colors;
+            @apply w-full text-sm border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-marite-primary/30 focus:border-marite-primary outline-none transition-all bg-gray-50 focus:bg-white shadow-inner;
         }
 
         /* Animação de pulso suave para o logo no Loader */
@@ -66,13 +71,16 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(209, 149, 158, 0); }
         }
         .animate-soft-pulse { animation: softPulse 2s infinite; }
+        
+        /* Ajuste de âncora para os menus não ficarem debaixo do header */
+        .scroll-mt-section { scroll-margin-top: 120px; }
     </style>
 </head>
 <body class="bg-marite-bg text-gray-800 font-sans antialiased overflow-x-hidden relative">
 
-    <!-- Toast Notification (Substitui o Alert feio do navegador) -->
-    <div id="toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-2xl z-[100] transition-all duration-500 opacity-0 -translate-y-full flex items-center gap-3 text-white pointer-events-none">
-        <i id="toast-icon" class="fas fa-exclamation-circle"></i>
+    <!-- Toast Notification Elegante -->
+    <div id="toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-2xl z-[110] transition-all duration-500 opacity-0 -translate-y-full flex items-center gap-3 text-white pointer-events-none">
+        <i id="toast-icon" class="fas fa-info-circle"></i>
         <span id="toast-msg" class="font-medium text-sm">Mensagem</span>
     </div>
 
@@ -80,30 +88,26 @@
     <div id="page-loader" class="fixed inset-0 z-[100] bg-marite-bg flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="relative w-32 h-32 mb-6 flex justify-center items-center">
             <div class="absolute inset-0 rounded-full border border-marite-accent1 opacity-50 animate-ping" style="animation-duration: 2s;"></div>
-            
-            <!-- Container da Logo no Loader -->
             <div class="relative w-full h-full rounded-full overflow-hidden border-4 border-white bg-marite-dark flex items-center justify-center shadow-2xl z-10 animate-soft-pulse">
-                <img src="logo.png" alt="Maritê Logo" class="w-full h-full object-cover" 
-                     onerror="tryAlternativeImageFormats(this, 'logo')">
-                <!-- Fallback Text caso a imagem não carregue de jeito nenhum -->
+                <img src="logo.png" alt="Maritê Logo" class="w-full h-full object-cover" onerror="tryAlternativeImageFormats(this, 'logo')">
                 <span class="hidden text-white font-serif font-bold text-4xl fallback-text">M</span>
             </div>
         </div>
         <h2 class="font-serif text-xl font-bold text-marite-dark tracking-[0.4em] uppercase animate-pulse">Maritê</h2>
     </div>
 
-    <!-- HEADER -->
     <header class="fixed w-full top-0 left-0 z-40 glass-effect border-b border-marite-accent1/30 shadow-sm transition-all duration-300">
-        <div class="w-full px-4 md:px-8 py-3 flex justify-between items-center">
-            <!-- Logo -->
+        <!-- Alterado para container mx-auto para alinhar perfeitamente com o conteúdo do site -->
+        <div class="container mx-auto px-4 lg:px-8 py-3 flex justify-between items-center">
+            
+            <!-- Logo alinhada à esquerda perfeitamente -->
             <a href="#" class="flex items-center gap-4 group">
                 <div class="h-14 w-14 rounded-full overflow-hidden shadow-md border-2 border-white group-hover:border-marite-accent1 transition-colors flex-shrink-0 bg-marite-dark flex items-center justify-center relative">
-                    <img src="logo.png" alt="Maritê Logo" class="h-full w-full object-cover z-10" 
-                         onerror="tryAlternativeImageFormats(this, 'logo')">
+                    <img src="logo.png" alt="Maritê Logo" class="h-full w-full object-cover z-10" onerror="tryAlternativeImageFormats(this, 'logo')">
                     <span class="hidden text-white font-serif font-bold text-xl fallback-text z-0">M</span>
                 </div>
                 <div class="hidden sm:block">
-                    <h1 class="font-serif text-2xl font-bold text-marite-dark tracking-widest uppercase leading-none mb-1">Maritê</h1>
+                    <h1 class="font-serif text-[1.4rem] font-bold text-marite-dark tracking-widest uppercase leading-none mb-1">Maritê</h1>
                     <p class="text-[0.65rem] text-marite-primary tracking-widest uppercase font-semibold">Cama, Mesa e Banho</p>
                 </div>
             </a>
@@ -134,13 +138,11 @@
         </div>
     </header>
 
-    <!-- HERO SECTION PREMIUM -->
-    <section class="mt-[110px] md:mt-[80px] relative bg-gradient-to-br from-marite-bg via-white to-marite-accent1/20 overflow-hidden">
+    <section class="mt-[110px] md:mt-[80px] relative bg-gradient-to-br from-marite-bg via-white to-marite-accent1/10 overflow-hidden">
         <!-- Elemento decorativo de fundo -->
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-marite-accent2 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
-        <div class="absolute -bottom-40 -left-20 w-72 h-72 bg-marite-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-marite-accent2 rounded-full mix-blend-multiply filter blur-3xl opacity-20 transform translate-x-1/2 -translate-y-1/4"></div>
 
-        <div class="container mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+        <div class="container mx-auto px-4 lg:px-8 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
             
             <!-- Text Content -->
             <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
@@ -151,7 +153,7 @@
                     Leve o <span class="text-marite-primary italic font-light">conforto</span> e a elegância para o seu lar.
                 </h2>
                 <p class="text-gray-600 mb-10 text-lg font-light max-w-lg leading-relaxed">
-                    Descubra a nossa coleção de peças selecionadas a dedo para transformar os seus ambientes em verdadeiros refúgios de bem-estar e sofisticação.
+                    Descubra a nossa coleção de peças selecionadas a dedo para transformar os seus ambientes em verdadeiros refúgios de bem-estar.
                 </p>
                 <a href="#catalogo" class="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-marite-primary rounded-full hover:bg-marite-dark shadow-[0_10px_20px_rgba(132,63,100,0.3)] hover:shadow-[0_10px_25px_rgba(63,16,47,0.4)] hover:-translate-y-1">
                     <span class="mr-3 tracking-wider">Ver Catálogo</span>
@@ -159,30 +161,26 @@
                 </a>
             </div>
             
-            <!-- Image Promo -->
-            <div class="w-full md:w-5/12 relative flex justify-center">
-                <!-- Moldura decorativa atrás da imagem -->
-                <div class="absolute inset-0 bg-marite-dark rounded-t-full rounded-b-[4rem] transform translate-x-4 translate-y-4 opacity-10"></div>
-                
-                <!-- Imagem Promocional do Cliente com fallback inteligente -->
-                <img src="banner.jpg" alt="Para quem tem estilo e bom gosto" 
-                     class="relative z-10 w-full max-w-[400px] object-cover rounded-t-full rounded-b-[4rem] shadow-2xl border-8 border-white"
-                     onerror="tryAlternativeImageFormats(this, 'banner')">
+            <!-- Image Promo Flutuante -->
+            <div class="w-full md:w-1/2 relative flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-[450px] animate-float">
+                    <div class="absolute inset-0 bg-marite-primary rounded-2xl transform translate-x-3 translate-y-3 opacity-20"></div>
+                    <img src="banner.jpg" alt="Para quem tem estilo e bom gosto" 
+                         class="relative z-10 w-full object-cover rounded-2xl shadow-2xl border-4 border-white"
+                         onerror="tryAlternativeImageFormats(this, 'banner')">
+                </div>
             </div>
 
         </div>
     </section>
 
-    <!-- MAIN CATALOG -->
-    <main id="catalogo" class="container mx-auto px-4 py-20 space-y-24 relative z-20">
+    <main id="catalogo" class="container mx-auto px-4 lg:px-8 py-20 space-y-24 relative z-20">
         <!-- Dinamicamente preenchido pelo JS -->
         <div id="catalog-container" class="space-y-24"></div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-marite-dark text-marite-bg pt-16 pb-8 border-t-[6px] border-marite-primary relative overflow-hidden">
-        <!-- Logo d'água no fundo do footer -->
-        <i class="fas fa-crown absolute -bottom-10 -right-10 text-[20rem] text-white opacity-5 transform -rotate-12"></i>
+        <i class="fas fa-crown absolute -bottom-10 -right-10 text-[20rem] text-white opacity-5 transform -rotate-12 pointer-events-none"></i>
         
         <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 text-center md:text-left relative z-10">
             <div>
@@ -198,12 +196,12 @@
                     <span class="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-marite-primary hidden md:block"></span>
                 </h4>
                 <ul class="space-y-4 text-sm font-light text-marite-accent1">
-                    <li class="flex items-center justify-center md:justify-start hover:text-white transition-colors">
-                        <i class="fab fa-whatsapp w-6 text-marite-accent2 text-lg"></i> 
+                    <li class="flex items-center justify-center md:justify-start hover:text-white transition-colors group">
+                        <i class="fab fa-whatsapp w-6 text-marite-accent2 text-lg group-hover:scale-110 transition-transform"></i> 
                         <a href="https://wa.me/5562996392199" target="_blank">(62) 99639-2199</a>
                     </li>
-                    <li class="flex items-center justify-center md:justify-start hover:text-white transition-colors">
-                        <i class="far fa-envelope w-6 text-marite-accent2 text-lg"></i> 
+                    <li class="flex items-center justify-center md:justify-start hover:text-white transition-colors group">
+                        <i class="far fa-envelope w-6 text-marite-accent2 text-lg group-hover:scale-110 transition-transform"></i> 
                         <a href="mailto:marcia.regis190@gmail.com">marcia.regis190@gmail.com</a>
                     </li>
                 </ul>
@@ -228,10 +226,8 @@
         </div>
     </footer>
 
-    <!-- MODAL DE PRODUTO -->
     <div id="product-modal-backdrop" class="fixed inset-0 bg-marite-dark/80 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-all duration-300 opacity-0" onclick="closeModal(event)">
         <div id="product-modal-content" class="bg-white rounded-3xl w-11/12 max-w-md overflow-hidden shadow-2xl transform scale-95 transition-all duration-300" onclick="event.stopPropagation()">
-            <!-- Imagem e Fechar -->
             <div class="relative h-60 bg-gray-100">
                 <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -245,15 +241,11 @@
                 <h3 id="modal-title" class="font-serif text-2xl font-bold text-marite-dark mb-2 leading-tight">Nome do Produto</h3>
                 <p id="modal-price" class="text-marite-primary font-bold text-2xl mb-8">R$ 0,00</p>
                 
-                <!-- Escolha de Cor -->
                 <div class="mb-6">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Selecione a Cor</label>
-                    <div id="modal-colors" class="flex flex-wrap gap-4">
-                        <!-- Botões de cor gerados via JS -->
-                    </div>
+                    <div id="modal-colors" class="flex flex-wrap gap-4"></div>
                 </div>
 
-                <!-- Quantidade -->
                 <div class="mb-10">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Quantidade</label>
                     <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl w-36 overflow-hidden shadow-inner">
@@ -263,7 +255,6 @@
                     </div>
                 </div>
 
-                <!-- Botão Adicionar -->
                 <button onclick="confirmAddToCart()" class="group w-full bg-marite-primary hover:bg-marite-dark text-white font-bold py-4 px-4 rounded-2xl transition-all duration-300 shadow-[0_8px_15px_rgba(132,63,100,0.2)] hover:shadow-[0_8px_20px_rgba(63,16,47,0.3)] flex items-center justify-center gap-3">
                     <i class="fas fa-shopping-bag group-hover:scale-110 transition-transform"></i> 
                     <span>Adicionar ao Carrinho</span>
@@ -272,12 +263,10 @@
         </div>
     </div>
 
-    <!-- SIDE DRAWER DO CARRINHO -->
     <div id="cart-backdrop" class="fixed inset-0 bg-marite-dark/60 backdrop-blur-sm z-50 hidden transition-opacity duration-300 opacity-0" onclick="toggleCart(event)"></div>
     
-    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-marite-bg z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
-        <!-- Drawer Header -->
-        <div class="bg-white px-6 py-5 border-b border-gray-100 flex items-center justify-between shadow-sm shrink-0">
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <div class="bg-white px-6 py-5 flex items-center justify-between shadow-sm shrink-0 z-10">
             <h2 class="font-serif text-2xl font-bold text-marite-dark flex items-center gap-3">
                 <span class="w-10 h-10 rounded-full bg-marite-primary/10 flex items-center justify-center text-marite-primary">
                     <i class="fas fa-shopping-bag"></i>
@@ -289,15 +278,9 @@
             </button>
         </div>
 
-        <!-- Drawer Content (Scrollable) -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
-            
-            <!-- Itens do Carrinho -->
-            <div id="cart-items" class="space-y-4">
-                <!-- Itens injetados via JS -->
-            </div>
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-marite-bg/50">
+            <div id="cart-items" class="space-y-4"></div>
 
-            <!-- Total -->
             <div id="cart-total-container" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center text-xl font-bold text-marite-dark">
                     <span>Total do Pedido:</span>
@@ -305,56 +288,57 @@
                 </div>
             </div>
 
-            <!-- Formulário de Checkout Reformulado -->
             <div id="checkout-form-container" class="hidden bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mt-6 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-1 h-full bg-marite-primary"></div>
                 <h3 class="font-serif text-xl font-bold text-marite-dark mb-5 border-b border-gray-100 pb-3">Dados de Entrega</h3>
                 
-                <form id="checkout-form" class="space-y-5" onsubmit="event.preventDefault(); submitOrder();">
+                <form id="checkout-form" class="space-y-4" onsubmit="event.preventDefault(); submitOrder();">
                     
-                    <!-- Nome -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Nome Completo *</label>
-                        <input type="text" id="cust-name" required class="input-premium" placeholder="Como devemos lhe chamar?">
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Nome Completo *</label>
+                            <input type="text" id="cust-name" required class="input-premium" placeholder="Como devemos lhe chamar?">
+                        </div>
 
-                    <!-- Endereço Separado -->
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">WhatsApp *</label>
+                            <input type="text" id="cust-phone" required class="input-premium" placeholder="(00) 00000-0000">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">CEP *</label>
+                            <input type="text" id="cust-cep" required class="input-premium" placeholder="00000-000">
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2">
                             <label class="block text-xs font-bold text-gray-500 mb-1">Rua / Avenida *</label>
-                            <input type="text" id="cust-rua" required class="input-premium" placeholder="Sua rua">
+                            <input type="text" id="cust-rua" required class="input-premium" placeholder="Ex: Rua das Flores">
                         </div>
                         
-                        <div class="col-span-4">
+                        <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1">Número *</label>
                             <input type="text" id="cust-numero" required class="input-premium" placeholder="Nº">
                         </div>
                         
-                        <div class="col-span-8">
+                        <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1">Complemento</label>
                             <input type="text" id="cust-complemento" class="input-premium" placeholder="Apto, Casa, etc.">
                         </div>
 
-                        <div class="col-span-7">
+                        <div class="col-span-1 md:col-span-2">
                             <label class="block text-xs font-bold text-gray-500 mb-1">Bairro *</label>
                             <input type="text" id="cust-bairro" required class="input-premium" placeholder="Seu bairro">
                         </div>
-
-                        <div class="col-span-5">
-                            <label class="block text-xs font-bold text-gray-500 mb-1">CEP *</label>
-                            <input type="text" id="cust-cep" required class="input-premium" placeholder="00000-000">
-                        </div>
                     </div>
 
-                    <!-- Pagamento -->
                     <div class="pt-2">
                         <label class="block text-xs font-bold text-gray-500 mb-2">Forma de Pagamento *</label>
                         <div class="relative">
-                            <select id="cust-payment" required class="w-full text-sm border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-marite-primary outline-none bg-white appearance-none cursor-pointer font-medium text-gray-700">
+                            <select id="cust-payment" required class="w-full text-sm border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-marite-primary/30 focus:border-marite-primary outline-none bg-gray-50 focus:bg-white appearance-none cursor-pointer font-medium text-gray-700 shadow-inner">
                                 <option value="" disabled selected>Escolha como deseja pagar...</option>
                                 <option value="PIX">PIX (Chave enviada no WhatsApp)</option>
-                                <option value="Cartão de Crédito">Cartão de Crédito (Máquininha na entrega)</option>
-                                <option value="Cartão de Débito">Cartão de Débito (Máquininha na entrega)</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito (Máquina na entrega)</option>
+                                <option value="Cartão de Débito">Cartão de Débito (Máquina na entrega)</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                 <i class="fas fa-chevron-down text-sm"></i>
@@ -362,7 +346,6 @@
                         </div>
                     </div>
                     
-                    <!-- Botão Finalizar -->
                     <button type="submit" class="group w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold text-lg py-4 px-4 rounded-2xl transition-all duration-300 shadow-[0_8px_15px_rgba(37,211,102,0.3)] hover:shadow-[0_8px_20px_rgba(37,211,102,0.4)] flex items-center justify-center gap-3 mt-4">
                         <i class="fab fa-whatsapp text-2xl group-hover:animate-bounce"></i> 
                         <span>Enviar Pedido</span>
@@ -371,7 +354,6 @@
                 </form>
             </div>
 
-            <!-- Carrinho Vazio -->
             <div id="empty-cart-msg" class="text-center flex flex-col items-center justify-center h-full text-gray-400 py-20">
                 <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
                     <i class="fas fa-shopping-basket text-4xl text-gray-300"></i>
@@ -383,119 +365,63 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT: Dados e Lógica -->
     <script>
-        // Set ano atual no footer
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
-        // 1. LÓGICA INTELIGENTE DE IMAGENS (Smart Fallback)
-        // Se a imagem não for encontrada, ele tenta outras extensões automaticamente
+        // Máscaras de Input (A melhor UX para formulários)
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof IMask !== 'undefined') {
+                IMask(document.getElementById('cust-cep'), { mask: '00000-000' });
+                IMask(document.getElementById('cust-phone'), { mask: '(00) 00000-0000' });
+            }
+        });
+
+        // Fallback Inteligente de Imagens
         function tryAlternativeImageFormats(imgElement, baseNameOrCatalog) {
-            // Previne loop infinito
             if (imgElement.dataset.failedComplete === "true") return;
 
-            const extensions = ['.jpg', '.png', '.jpeg', '.webp'];
+            const extensions = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG'];
             let currentAttempt = parseInt(imgElement.dataset.attempt || "0");
 
             if (currentAttempt < extensions.length) {
-                // Tenta a próxima extensão
-                let srcBase = "";
-                
-                if (baseNameOrCatalog === 'logo' || baseNameOrCatalog === 'banner') {
-                    srcBase = baseNameOrCatalog;
-                } else {
-                    // É um produto do catálogo (já vem o nome base do objeto)
-                    srcBase = baseNameOrCatalog;
-                }
-
+                let srcBase = (baseNameOrCatalog === 'logo' || baseNameOrCatalog === 'banner') ? baseNameOrCatalog : baseNameOrCatalog;
                 imgElement.src = srcBase + extensions[currentAttempt];
                 imgElement.dataset.attempt = currentAttempt + 1;
             } else {
-                // Se tudo falhar, define como falha completa
                 imgElement.dataset.failedComplete = "true";
-                
-                // Trata a falha de acordo com o elemento
                 if (baseNameOrCatalog === 'logo') {
                     imgElement.classList.add('hidden');
                     const textFallback = imgElement.parentElement.querySelector('.fallback-text');
                     if(textFallback) textFallback.classList.remove('hidden');
                 } else if (baseNameOrCatalog === 'banner') {
-                    imgElement.src = "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"; // Imagem premium da web como backup
+                    imgElement.src = "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"; 
                 } else {
-                    // Imagem de produto fallback
                     imgElement.src = "https://placehold.co/600x600/efebeb/3f102f?text=Foto+Indisponivel&font=Montserrat";
                 }
             }
         }
 
-        // 2. DADOS DOS PRODUTOS (Nomes Exatos baseados nas imagens locais)
-        // O nome da propriedade 'imageBase' não tem extensão, o sistema adiciona '.jpg' inicialmente.
+        // Dados do Catálogo (Nomes Exatos baseados nas imagens locais)
         const productsDB = [
-            // CAMA
-            {
-                id: 1, category: "Cama", name: "Lençol Premium 400 Fios Algodão", price: 189.90,
-                imageBase: "Lençol Premium 400 Fios Algodão",
-                colors: [{ name: "Branco", hex: "#ffffff" }, { name: "Pérola", hex: "#f3e5ab" }, { name: "Cinza Claro", hex: "#d3d3d3" }]
-            },
-            {
-                id: 2, category: "Cama", name: "Cobre Leito Matelassê Dupla Face", price: 249.90,
-                imageBase: "Cobre Leito Matelassê Dupla Face",
-                colors: [{ name: "Roxo Maritê", hex: "#843f64" }, { name: "Rose Gold", hex: "#d1959e" }]
-            },
-            // MESA
-            {
-                id: 3, category: "Mesa", name: "Kit Panos de Prato Bordados (3 peças)", price: 45.00,
-                imageBase: "Kit Panos de Prato Bordados (3 peças)",
-                colors: [{ name: "Sortido Clássico", hex: "#eeeeee" }]
-            },
-            {
-                id: 4, category: "Mesa", name: "Forro de Mesa Linho Elegance", price: 120.00,
-                imageBase: "Forro de Mesa Linho Elegance",
-                colors: [{ name: "Cru/Natural", hex: "#d4c4b7" }, { name: "Branco", hex: "#ffffff" }]
-            },
-            {
-                id: 5, category: "Mesa", name: "Cobre Lanche Renda Francesa", price: 65.50,
-                imageBase: "Cobre Lanche Renda Francesa",
-                colors: [{ name: "Branco", hex: "#ffffff" }]
-            },
-            // BANHO
-            {
-                id: 6, category: "Banho", name: "Jogo de Toalhas Bordadas (5 peças)", price: 199.90,
-                imageBase: "Jogo de Toalhas Bordadas (5 peças)",
-                colors: [{ name: "Branco c/ Dourado", hex: "#fffdf0" }, { name: "Ameixa", hex: "#3f102f" }]
-            },
-            {
-                id: 7, category: "Banho", name: "Toalha de Banho Gigante Algodão", price: 79.90,
-                imageBase: "Toalha de Banho Gigante Algodão",
-                colors: [{ name: "Rosa Chá", hex: "#da9cc3" }, { name: "Azul Bebê", hex: "#b2d8d8" }, { name: "Branco", hex: "#ffffff" }]
-            },
-            // VESTUÁRIO
-            {
-                id: 8, category: "Vestuário", name: "Camisola Seda com Renda", price: 159.00,
-                imageBase: "Camisola Seda com Renda",
-                colors: [{ name: "Preto", hex: "#111111" }, { name: "Vinho Escuro", hex: "#3f102f" }]
-            },
-            {
-                id: 9, category: "Vestuário", name: "Roupão Aveludado Premium", price: 189.90,
-                imageBase: "Roupão Aveludado Premium",
-                colors: [{ name: "Branco", hex: "#ffffff" }, { name: "Rosa Seco", hex: "#d1959e" }]
-            },
-            // DECORAÇÃO (Nome ajustado conforme sua instrução do hífen)
-            {
-                id: 10, category: "Decoração", name: "Tapete Felpudo Sala-Quarto", price: 299.00,
-                imageBase: "Tapete Felpudo Sala-Quarto",
-                colors: [{ name: "Areia", hex: "#eaddd5" }, { name: "Cinza Chumbo", hex: "#4a4a4a" }]
-            }
+            { id: 1, category: "Cama", name: "Lençol Premium 400 Fios Algodão", price: 189.90, imageBase: "Lençol Premium 400 Fios Algodão", colors: [{ name: "Branco", hex: "#ffffff" }, { name: "Pérola", hex: "#f3e5ab" }, { name: "Cinza Claro", hex: "#d3d3d3" }] },
+            { id: 2, category: "Cama", name: "Cobre Leito Matelassê Dupla Face", price: 249.90, imageBase: "Cobre Leito Matelassê Dupla Face", colors: [{ name: "Roxo Maritê", hex: "#843f64" }, { name: "Rose Gold", hex: "#d1959e" }] },
+            { id: 3, category: "Mesa", name: "Kit Panos de Prato Bordados (3 peças)", price: 45.00, imageBase: "Kit Panos de Prato Bordados (3 peças)", colors: [{ name: "Sortido Clássico", hex: "#eeeeee" }] },
+            { id: 4, category: "Mesa", name: "Forro de Mesa Linho Elegance", price: 120.00, imageBase: "Forro de Mesa Linho Elegance", colors: [{ name: "Cru/Natural", hex: "#d4c4b7" }, { name: "Branco", hex: "#ffffff" }] },
+            { id: 5, category: "Mesa", name: "Cobre Lanche Renda Francesa", price: 65.50, imageBase: "Cobre Lanche Renda Francesa", colors: [{ name: "Branco", hex: "#ffffff" }] },
+            { id: 6, category: "Banho", name: "Jogo de Toalhas Bordadas (5 peças)", price: 199.90, imageBase: "Jogo de Toalhas Bordadas (5 peças)", colors: [{ name: "Branco c/ Dourado", hex: "#fffdf0" }, { name: "Ameixa", hex: "#3f102f" }] },
+            { id: 7, category: "Banho", name: "Toalha de Banho Gigante Algodão", price: 79.90, imageBase: "Toalha de Banho Gigante Algodão", colors: [{ name: "Rosa Chá", hex: "#da9cc3" }, { name: "Azul Bebê", hex: "#b2d8d8" }, { name: "Branco", hex: "#ffffff" }] },
+            { id: 8, category: "Vestuário", name: "Camisola Seda com Renda", price: 159.00, imageBase: "Camisola Seda com Renda", colors: [{ name: "Preto", hex: "#111111" }, { name: "Vinho Escuro", hex: "#3f102f" }] },
+            { id: 9, category: "Vestuário", name: "Roupão Aveludado Premium", price: 189.90, imageBase: "Roupão Aveludado Premium", colors: [{ name: "Branco", hex: "#ffffff" }, { name: "Rosa Seco", hex: "#d1959e" }] },
+            { id: 10, category: "Decoração", name: "Tapete Felpudo Sala-Quarto", price: 299.00, imageBase: "Tapete Felpudo Sala-Quarto", colors: [{ name: "Areia", hex: "#eaddd5" }, { name: "Cinza Chumbo", hex: "#4a4a4a" }] }
         ];
 
-        // 3. ESTADOS DA APLICAÇÃO
         let cart = [];
         let currentSelectedProduct = null;
         let selectedColor = null;
 
         const formatBRL = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-        // Função de Toast (Aviso elegante)
+        // Função de Toast Elegante
         function showToast(message, isError = true) {
             const toast = document.getElementById('toast');
             const msgEl = document.getElementById('toast-msg');
@@ -503,27 +429,26 @@
 
             msgEl.textContent = message;
             
-            // Estilização condicional
             if(isError) {
-                toast.classList.add('bg-red-600');
+                toast.classList.add('bg-marite-primary');
                 toast.classList.remove('bg-[#25D366]');
                 iconEl.className = "fas fa-exclamation-circle text-xl";
             } else {
-                toast.classList.remove('bg-red-600');
+                toast.classList.remove('bg-marite-primary');
                 toast.classList.add('bg-[#25D366]');
                 iconEl.className = "fas fa-check-circle text-xl";
             }
 
-            // Exibir
             toast.classList.remove('-translate-y-full', 'opacity-0');
-
-            // Esconder após 3.5s
-            setTimeout(() => {
-                toast.classList.add('-translate-y-full', 'opacity-0');
-            }, 3500);
+            setTimeout(() => toast.classList.add('-translate-y-full', 'opacity-0'), 3500);
         }
 
-        // 4. RENDERIZAR CATÁLOGO
+        // Função para remover acentos e criar IDs seguros para o Menu
+        function normalizeId(text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
+        // Renderizar Catálogo com Badges de Cor Estilo "Pílula"
         function renderCatalog() {
             const container = document.getElementById('catalog-container');
             const categories = ["Cama", "Mesa", "Banho", "Vestuário", "Decoração"];
@@ -533,45 +458,45 @@
                 if (catProducts.length === 0) return;
 
                 const section = document.createElement('section');
-                section.id = category.toLowerCase();
-                section.className = "scroll-mt-32"; 
+                section.id = normalizeId(category); // Resolve o bug do menu (Ex: vestuario)
+                section.className = "scroll-mt-section"; 
                 
                 section.innerHTML = `
                     <div class="flex items-center gap-6 mb-10">
                         <h2 class="font-serif text-3xl md:text-4xl font-bold text-marite-dark tracking-wide">${category}</h2>
                         <div class="h-0.5 bg-marite-accent1/30 flex-1 rounded-full"></div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="grid-${category}"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="grid-${normalizeId(category)}"></div>
                 `;
                 
                 container.appendChild(section);
-                const grid = section.querySelector(`#grid-${category}`);
+                const grid = section.querySelector(`#grid-${normalizeId(category)}`);
                 
                 catProducts.forEach(product => {
                     const card = document.createElement('div');
-                    // Design do card super premium
                     card.className = "bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_30px_rgba(63,16,47,0.1)] transition-all duration-500 group border border-gray-100 flex flex-col transform hover:-translate-y-2";
                     
-                    // O src tenta o .jpg primeiro. Se falhar, chama o smart fallback.
+                    // Design da Pílula de Cores idêntico ao solicitado
+                    const colorsPillHtml = `
+                        <div class="absolute top-4 left-4 bg-white/95 backdrop-blur px-3 py-1.5 rounded-full shadow-md flex gap-1.5 items-center border border-gray-100/50">
+                            ${product.colors.slice(0,3).map(c => `<span class="w-4 h-4 rounded-full border shadow-inner" style="background-color: ${c.hex}; border-color: rgba(0,0,0,0.1)"></span>`).join('')}
+                            ${product.colors.length > 3 ? '<span class="text-[0.6rem] font-bold text-gray-600 ml-1">+' + (product.colors.length - 3) + '</span>' : ''}
+                        </div>
+                    `;
+
                     card.innerHTML = `
                         <div class="relative h-72 overflow-hidden bg-gray-50 flex items-center justify-center">
                             <img src="${product.imageBase}.jpg" alt="${product.name}" 
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                                  onerror="tryAlternativeImageFormats(this, '${product.imageBase}')">
-                            <div class="absolute inset-0 bg-gradient-to-t from-marite-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <!-- Badges de cores disponíveis -->
-                            <div class="absolute top-4 left-4 flex gap-1 bg-white/90 backdrop-blur px-2 py-1.5 rounded-full shadow-sm">
-                                ${product.colors.slice(0,3).map(c => `<span class="w-3 h-3 rounded-full border border-gray-200" style="background-color: ${c.hex}"></span>`).join('')}
-                                ${product.colors.length > 3 ? '<span class="text-[0.55rem] font-bold text-gray-500 ml-1">+' + (product.colors.length - 3) + '</span>' : ''}
-                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-marite-dark/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            ${colorsPillHtml}
                         </div>
                         <div class="p-6 flex flex-col flex-1 relative bg-white">
                             <span class="text-[0.65rem] uppercase tracking-widest text-marite-accent1 font-bold mb-2 block">${product.category}</span>
                             <h3 class="font-serif font-bold text-marite-dark text-lg leading-snug mb-3">${product.name}</h3>
                             <div class="mt-auto flex items-end justify-between">
                                 <div>
-                                    <p class="text-xs text-gray-400 mb-1 line-through">De: ${formatBRL(product.price * 1.2)}</p>
                                     <p class="text-marite-primary font-bold text-2xl">${formatBRL(product.price)}</p>
                                 </div>
                                 <button onclick="openModal(${product.id})" class="w-12 h-12 rounded-full bg-marite-bg text-marite-primary group-hover:bg-marite-primary group-hover:text-white transition-colors duration-300 flex items-center justify-center shadow-sm">
@@ -585,12 +510,11 @@
             });
         }
 
-        // 5. LÓGICA DO MODAL (ESCOLHA DE COR E QTD)
+        // Lógica do Modal
         function openModal(productId) {
             currentSelectedProduct = productsDB.find(p => p.id === productId);
             selectedColor = null; 
             
-            // Configura imagem principal com try catch inteligente
             const imgEl = document.getElementById('modal-img');
             imgEl.dataset.failedComplete = "false";
             imgEl.dataset.attempt = "0";
@@ -602,7 +526,6 @@
             document.getElementById('modal-price').textContent = formatBRL(currentSelectedProduct.price);
             document.getElementById('modal-qty').value = 1;
 
-            // Gera botões de cor
             const colorsContainer = document.getElementById('modal-colors');
             colorsContainer.innerHTML = '';
             
@@ -630,11 +553,9 @@
                 colorsContainer.appendChild(btn);
             });
 
-            // Animação de entrada
             const backdrop = document.getElementById('product-modal-backdrop');
             const content = document.getElementById('product-modal-content');
             backdrop.classList.remove('hidden');
-            
             setTimeout(() => {
                 backdrop.classList.remove('opacity-0');
                 content.classList.remove('scale-95');
@@ -643,24 +564,18 @@
 
         function selectColor(btnElement, colorName) {
             selectedColor = colorName;
-            
-            // Reset styles
             document.querySelectorAll('.color-option-btn').forEach(btn => {
                 const circle = btn.querySelector('span.w-10');
                 const icon = btn.querySelector('i');
                 const ring = btn.querySelector('.color-ring');
-                
                 circle.classList.remove('scale-110');
                 icon.classList.remove('opacity-100', 'scale-100');
                 icon.classList.add('opacity-0', 'scale-50');
                 ring.classList.replace('ring-marite-primary', 'ring-transparent');
             });
-            
-            // Set active style
             const circle = btnElement.querySelector('span.w-10');
             const icon = btnElement.querySelector('i');
             const ring = btnElement.querySelector('.color-ring');
-            
             circle.classList.add('scale-110');
             icon.classList.remove('opacity-0', 'scale-50');
             icon.classList.add('opacity-100', 'scale-100');
@@ -676,71 +591,45 @@
 
         function closeModal(event) {
             if(event && event.target.id !== 'product-modal-backdrop' && event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') return;
-            
             const backdrop = document.getElementById('product-modal-backdrop');
             const content = document.getElementById('product-modal-content');
-            
             backdrop.classList.add('opacity-0');
             content.classList.add('scale-95');
-            
-            setTimeout(() => {
-                backdrop.classList.add('hidden');
-                currentSelectedProduct = null;
-            }, 300);
+            setTimeout(() => { backdrop.classList.add('hidden'); currentSelectedProduct = null; }, 300);
         }
 
         function confirmAddToCart() {
-            if (!selectedColor) {
-                showToast("Selecione uma cor antes de adicionar ao carrinho.");
-                return;
-            }
-
+            if (!selectedColor) { showToast("Selecione uma cor antes de adicionar ao carrinho."); return; }
             const qty = parseInt(document.getElementById('modal-qty').value);
-            
             const existingItemIndex = cart.findIndex(item => item.id === currentSelectedProduct.id && item.color === selectedColor);
             
-            if (existingItemIndex > -1) {
-                cart[existingItemIndex].qty += qty;
-            } else {
-                cart.push({
-                    id: currentSelectedProduct.id,
-                    name: currentSelectedProduct.name,
-                    price: currentSelectedProduct.price,
-                    imageBase: currentSelectedProduct.imageBase, // Salva o nome base
-                    color: selectedColor,
-                    qty: qty
-                });
+            if (existingItemIndex > -1) cart[existingItemIndex].qty += qty;
+            else {
+                cart.push({ id: currentSelectedProduct.id, name: currentSelectedProduct.name, price: currentSelectedProduct.price, imageBase: currentSelectedProduct.imageBase, color: selectedColor, qty: qty });
             }
 
             updateCartUI();
             closeModal();
-            showToast(`${qty}x ${currentSelectedProduct.name} adicionado!`, false);
+            showToast(`${qty}x adicionado ao carrinho!`, false);
             
             const badge = document.getElementById('cart-badge');
             badge.classList.add('animate-bounce');
             setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
         }
 
-        // 6. LÓGICA DO CARRINHO
+        // Lógica do Carrinho
         function toggleCart(event) {
             if(event && event.target.id !== 'cart-backdrop' && !event.currentTarget.classList.contains('fa-times') && !event.currentTarget.classList.contains('relative') && !event.currentTarget.classList.contains('fa-shopping-bag')) return;
-
             const drawer = document.getElementById('cart-drawer');
             const backdrop = document.getElementById('cart-backdrop');
             const isClosed = drawer.classList.contains('translate-x-full');
 
             if (isClosed) {
                 backdrop.classList.remove('hidden');
-                setTimeout(() => {
-                    backdrop.classList.remove('opacity-0');
-                    drawer.classList.remove('translate-x-full');
-                }, 10);
+                setTimeout(() => { backdrop.classList.remove('opacity-0'); drawer.classList.remove('translate-x-full'); }, 10);
             } else {
-                backdrop.classList.add('opacity-0');
-                drawer.classList.add('translate-x-full');
-                setTimeout(() => {
-                    backdrop.classList.add('hidden');
-                }, 300);
+                backdrop.classList.add('opacity-0'); drawer.classList.add('translate-x-full');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
             }
         }
 
@@ -753,28 +642,21 @@
 
             const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
             badge.textContent = totalItems;
-            if(totalItems > 0) badge.classList.remove('scale-0');
-            else badge.classList.add('scale-0');
+            if(totalItems > 0) badge.classList.remove('scale-0'); else badge.classList.add('scale-0');
 
             if (cart.length === 0) {
                 itemsContainer.innerHTML = '';
-                totalContainer.classList.add('hidden');
-                formContainer.classList.add('hidden');
-                emptyMsg.classList.remove('hidden');
+                totalContainer.classList.add('hidden'); formContainer.classList.add('hidden'); emptyMsg.classList.remove('hidden');
                 return;
             }
 
-            emptyMsg.classList.add('hidden');
-            totalContainer.classList.remove('hidden');
-            formContainer.classList.remove('hidden');
-
+            emptyMsg.classList.add('hidden'); totalContainer.classList.remove('hidden'); formContainer.classList.remove('hidden');
             itemsContainer.innerHTML = '';
             let totalValue = 0;
 
             cart.forEach((item, index) => {
                 const subtotal = item.price * item.qty;
                 totalValue += subtotal;
-
                 const itemEl = document.createElement('div');
                 itemEl.className = "flex gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative group";
                 itemEl.innerHTML = `
@@ -784,7 +666,7 @@
                     <div class="flex-1 flex flex-col justify-between py-1">
                         <div class="flex justify-between items-start gap-2">
                             <div>
-                                <h4 class="font-bold text-sm text-marite-dark leading-tight line-clamp-2 pr-4">${item.name}</h4>
+                                <h4 class="font-bold text-sm text-marite-dark leading-tight pr-4">${item.name}</h4>
                                 <p class="text-[0.7rem] text-gray-500 mt-1">Cor: <strong class="text-marite-primary">${item.color}</strong></p>
                             </div>
                             <button onclick="removeFromCart(${index})" class="absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100">
@@ -799,87 +681,56 @@
                 `;
                 itemsContainer.appendChild(itemEl);
             });
-
             document.getElementById('cart-total-value').textContent = formatBRL(totalValue);
         }
 
         function removeFromCart(index) {
-            const item = cart[index];
-            cart.splice(index, 1);
-            updateCartUI();
-            showToast(`${item.name} removido!`, true);
+            cart.splice(index, 1); updateCartUI(); showToast(`Produto removido!`, true);
         }
 
-        // 7. CHECKOUT VIA WHATSAPP (Lógica nova com endereços separados)
         function submitOrder() {
-            // Coleta os novos campos
             const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const cep = document.getElementById('cust-cep').value.trim();
             const rua = document.getElementById('cust-rua').value.trim();
             const numero = document.getElementById('cust-numero').value.trim();
             const complemento = document.getElementById('cust-complemento').value.trim();
             const bairro = document.getElementById('cust-bairro').value.trim();
-            const cep = document.getElementById('cust-cep').value.trim();
             const payment = document.getElementById('cust-payment').value;
 
-            // Validação
-            if (!name || !rua || !numero || !bairro || !cep || !payment) {
-                showToast("Por favor, preencha todos os campos com asterisco (*).", true);
-                return;
+            if (!name || !phone || !cep || !rua || !numero || !bairro || !payment) {
+                showToast("Por favor, preencha os campos obrigatórios (*).", true); return;
             }
-
             if (cart.length === 0) return;
 
             let totalValue = 0;
-            
-            // Montagem Elegante do Texto
             let text = `Olá Márcia! Gostaria de fazer o seguinte pedido na *Maritê*: 💜\n\n`;
-            
-            text += `👤 *DADOS DO CLIENTE*\n`;
-            text += `Nome: ${name}\n\n`;
-            
-            text += `📍 *ENDEREÇO DE ENTREGA*\n`;
-            text += `Rua: ${rua}, Nº ${numero}\n`;
+            text += `👤 *DADOS DO CLIENTE*\nNome: ${name}\nWhatsApp: ${phone}\n\n`;
+            text += `📍 *ENDEREÇO DE ENTREGA*\nRua: ${rua}, Nº ${numero}\n`;
             if(complemento) text += `Complemento: ${complemento}\n`;
-            text += `Bairro: ${bairro}\n`;
-            text += `CEP: ${cep}\n\n`;
-            
-            text += `💳 *PAGAMENTO*\n`;
-            text += `Forma: ${payment}\n\n`;
-            
-            text += `🛍️ *MEU PEDIDO*\n`;
-            text += `━━━━━━━━━━━━━━━━━\n`;
+            text += `Bairro: ${bairro}\nCEP: ${cep}\n\n`;
+            text += `💳 *PAGAMENTO*\nForma: ${payment}\n\n`;
+            text += `🛍️ *MEU PEDIDO*\n━━━━━━━━━━━━━━━━━\n`;
 
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 totalValue += subtotal;
-                text += `🔸 *${item.qty}x* ${item.name}\n`;
-                text += `↳ Cor: ${item.color}\n`;
-                text += `↳ Valor: ${formatBRL(subtotal)}\n\n`;
+                text += `🔸 *${item.qty}x* ${item.name}\n↳ Cor: ${item.color}\n↳ Valor: ${formatBRL(subtotal)}\n\n`;
             });
 
-            text += `━━━━━━━━━━━━━━━━━\n`;
-            text += `💰 *TOTAL DO PEDIDO:* ${formatBRL(totalValue)}\n`;
+            text += `━━━━━━━━━━━━━━━━━\n💰 *TOTAL DO PEDIDO:* ${formatBRL(totalValue)}\n`;
             
-            // Envia para o WhatsApp
-            const phone = "5562996392199";
-            const encodedText = encodeURIComponent(text);
-            const whatsappUrl = `https://wa.me/${phone}?text=${encodedText}`;
-            
-            window.open(whatsappUrl, '_blank');
+            const num = "5562996392199";
+            window.open(`https://wa.me/${num}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // 8. INICIALIZAÇÃO E ANIMAÇÃO DE ENTRADA
         window.onload = () => {
             renderCatalog();
-            
-            // Loader de exatos 1.3s
             setTimeout(() => {
                 const loader = document.getElementById('page-loader');
                 if(loader) {
                     loader.classList.add('opacity-0');
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 700); // Tempo do fade out
+                    setTimeout(() => loader.style.display = 'none', 700);
                 }
             }, 1300);
         };
